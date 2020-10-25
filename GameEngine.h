@@ -15,11 +15,14 @@ public:
   void init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
 
   void handleEvents();
-  void update();
+  void update(Uint32 ticks);
   void render();
   void clean();
 
   bool running() { return isRunning; };
+
+  // static SDL_Renderer *renderer;
+  static SDL_Event event;
 
 private:
   bool isRunning;

@@ -1,5 +1,4 @@
-#ifndef SPRITE_H
-#define SPRITE_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -38,13 +37,6 @@ private:
 
     SDL_Renderer *game_renderer;
 };
-
-Sprite::Sprite();
-Sprite::~Sprite();
-
-Sprite::sprite_init()
-{
-}
 
 int Sprite::getSpriteFrame()
 {
@@ -92,4 +84,3 @@ int Sprite::getSpriteFrameDuration()
 // if (state == STATE_MOVE_LEFT){
 //     flip_sprite == SDL_FLIP_HORIZONTAL;
 // }
-#endif

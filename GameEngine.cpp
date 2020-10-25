@@ -3,10 +3,14 @@
 #include "GameObject.h"
 
 GameObject *flying;
-GameObject *hound;
-GameObject *slug;
+// GameObject *hound;
+// GameObject *slug;
 
-GameEngine::GameEngine() {}
+SDL_Event GameEngine::event;
+
+GameEngine::GameEngine()
+{
+}
 GameEngine::~GameEngine() {}
 void GameEngine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
@@ -38,14 +42,15 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
         std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
     }
 
-    flying = new GameObject("enemy-flying.png", renderer, 0, 0);
-    hound = new GameObject("enemy-hound.png", renderer, 150, 0);
-    slug = new GameObject("enemy-slug.png", renderer, 300, 0);
+    flying = new GameObject("assets/enemy_flying_spritesheet.png", renderer, 0, 0);
+    // hound = new GameObject("assets/enemy-hound.png", renderer, 150, 0);
+    // slug = new GameObject("assets/enemy-slug.png", renderer, 300, 0);
 }
 void GameEngine::handleEvents()
 {
-    SDL_Event event;
+    // SDL_Event event = GameEngine::event;
     SDL_PollEvent(&event);
+    // SDL_WaitEvent(&event);
 
     switch (event.type)
     {
@@ -57,11 +62,11 @@ void GameEngine::handleEvents()
     }
 }
 
-void GameEngine::update()
+void GameEngine::update(Uint32 ticks)
 {
-    flying->objUpdate();
-    hound->objUpdate();
-    slug->objUpdate();
+    flying->objUpdate(ticks);
+    // hound->objUpdate();
+    // slug->objUpdate();
 }
 void GameEngine::render()
 {
@@ -72,8 +77,8 @@ void GameEngine::render()
      */
 
     flying->objRender();
-    hound->objRender();
-    slug->objRender();
+    // hound->objRender();
+    // slug->objRender();
 
     SDL_RenderPresent(renderer);
 }
