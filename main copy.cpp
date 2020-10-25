@@ -31,9 +31,6 @@ int main(int argc, char **argv)
 
   while (is_running)
   {
-    Uint32 ticks = SDL_GetTicks();
-    // Walking animation attempt
-    Uint32 seconds = ticks / 1000;
     Uint32 sprite = (ticks / 100) % 9;
     SDL_Rect srcrect = {sprite * 80, 0, 80, 74};
 
@@ -115,6 +112,10 @@ int main(int argc, char **argv)
     dstrect.x += alien_xvel;
     dstrect.y += alien_yvel;
   }
+  Uint32 ticks = SDL_GetTicks();
+  // Walking animation attempt
+  Uint32 seconds = ticks / 1000;
+
   std::cout << "Made it here Looping..." << std::endl;
   SDL_Delay(10);
   SDL_RenderClear(game->my_renderer);
