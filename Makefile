@@ -7,10 +7,10 @@ CC = g++
 CFLAGS = `sdl2-config --libs --cflags` -ggdb3 -O0 -Wall -lSDL2_image -lm 
 
 # add header files here
-HDRS = engine.h
+HDRS = GameEngine.h TextureManager.h GameObject.h
 
 # add source files here
-SRCS = main.cpp
+SRCS = exMain.cpp GameEngine.cpp TextureManager.cpp GameObject.cpp
 
 # generate names of object files
 OBJS = $(SRCS:.cpp=.o)

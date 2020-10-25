@@ -1,48 +1,61 @@
+#ifndef SPRITE_H
+#define SPRITE_H
+
 #include <iostream>
 #include <string>
 
-#include <SDL2/SDL.h> 
-#include <SDL2/SDL_image.h> 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 
+class Sprite
+{
+public:
+    Sprite();
+    ~Sprite();
 
-class Sprite{
-    public:
-        Sprite();
-        ~Sprite();
+    void sprite_init(
+        const char *graphic,
+        SDL_Renderer *ren,
+        int frames,
+        int frames_duration,
+        int start_width,
+        int start_height);
+    SDL_Rect sprite_update();
+    void sprite_render(SDL_Renderer *ren);
+    void sprite_quit();
 
-        void sprite_init(
-            const char *graphic,
-            SDL_Renderer *ren,
-            int frames,
-            int frames_duration,
-            int start_width,
-            int start_height);
-        SDL_Rect sprite_update();
-        void sprite_render(SDL_Renderer *ren);
-        void sprite_quit();
+    int getSpriteFrame();
+    int getSpriteFrameCount();
+    int getSpriteFrameDuration();
 
-        int getSpriteFrame();
-        int getSpriteFrameCount();
-        int getSpriteFrameDuration();
+private:
+    SDL_Texture *sprite_graphic;
+    SDL_Rect frame_rect;
+    int frame = 0;
+    int frame_count;
+    int frame_duration;
 
-    private:
-        SDL_Texture *sprite_graphic;
-        SDL_Rect frame_rect;
-        int frame = 0;
-        int frame_count;
-        int frame_duration;
-
-        SDL_Renderer* game_renderer;
+    SDL_Renderer *game_renderer;
 };
 
-int Sprite::getSpriteFrame(){
+Sprite::Sprite();
+Sprite::~Sprite();
+
+Sprite::sprite_init()
+{
+}
+
+int Sprite::getSpriteFrame()
+{
     return (frame);
 }
-int Sprite::getSpriteFrameCount(){
+int Sprite::getSpriteFrameCount()
+{
     return (frame_count);
 }
-int Sprite::getSpriteFrameDuration(){
+int Sprite::getSpriteFrameDuration()
+{
     return (frame_duration);
 }
 /**
@@ -63,7 +76,7 @@ int Sprite::getSpriteFrameDuration(){
 
 //     case STATE_MOVE_LEFT:
 //         frame_rect.y = MOVE_SPRITE;
-//         break; 
+//         break;
 //     }
 
 /**
@@ -71,11 +84,12 @@ int Sprite::getSpriteFrameDuration(){
  * Low level process - basically, flip then blit
  */
 // if (state == STATE_IDLE){
-    //     flip_sprite == SDL_FLIP_NONE;
-    // }
-    // if (state == STATE_MOVE_RIGHT){
-    //     flip_sprite == SDL_FLIP_NONE;
-    // }
-    // if (state == STATE_MOVE_LEFT){
-    //     flip_sprite == SDL_FLIP_HORIZONTAL;
-    // }
+//     flip_sprite == SDL_FLIP_NONE;
+// }
+// if (state == STATE_MOVE_RIGHT){
+//     flip_sprite == SDL_FLIP_NONE;
+// }
+// if (state == STATE_MOVE_LEFT){
+//     flip_sprite == SDL_FLIP_HORIZONTAL;
+// }
+#endif

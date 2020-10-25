@@ -3,8 +3,8 @@
 #include <iostream>
 #include <string>
 
-#include <SDL2/SDL.h> 
-#include <SDL2/SDL_image.h> 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 
 //Screen dimension
@@ -26,46 +26,44 @@ SDL_Event event;
 bool parachute = false;
 int counter = 0;
 
-SDL_Window* my_window = NULL;
-SDL_Renderer* my_renderer = NULL;
+SDL_Window *my_window = NULL;
+SDL_Renderer *my_renderer = NULL;
 SDL_Event input;
 
-void my_SDL_init(){
+void my_SDL_init()
+{
 
-  if (SDL_Init(SDL_INIT_EVERYTHING) != 0) { 
-    std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl; 
+  if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+  {
+    std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
   }
 
   //Enable gpu_enhanced textures
   IMG_Init(IMG_INIT_PNG);
-  
-  my_window = SDL_CreateWindow("Assignment 3", 
-			       SDL_WINDOWPOS_CENTERED, 
-			       SDL_WINDOWPOS_CENTERED, 
-			       SCREEN_WIDTH,
-			       SCREEN_HEIGHT, 0);
-  my_renderer = SDL_CreateRenderer(my_window,-1,0);
 
+  my_window = SDL_CreateWindow("Assignment 3",
+                               SDL_WINDOWPOS_CENTERED,
+                               SDL_WINDOWPOS_CENTERED,
+                               SCREEN_WIDTH,
+                               SCREEN_HEIGHT, 0);
+  my_renderer = SDL_CreateRenderer(my_window, -1, 0);
 }
 
-int main() 
-{ 
+int main()
+{
   my_SDL_init();
 
-  SDL_Texture* cliff_tex = NULL;
-  SDL_Texture* avatar_tex = NULL;
-  SDL_Texture* sunset_tex = NULL;
-  SDL_Texture* sunset_wave_tex = NULL;
-  SDL_Texture* parachute_tex = NULL;
-  
+  SDL_Texture *cliff_tex = NULL;
+  SDL_Texture *avatar_tex = NULL;
+  SDL_Texture *sunset_tex = NULL;
+  SDL_Texture *sunset_wave_tex = NULL;
+  SDL_Texture *parachute_tex = NULL;
+
   SDL_Surface *cliff_surf = IMG_Load("./first_cliff.png");
   SDL_Surface *sunset_surf = IMG_Load("./sunset.png");
   SDL_Surface *sunset_wave_surf = IMG_Load("./sunset_wave.png");
   SDL_Surface *avatar_surf = IMG_Load("./avatar_edge.png");
   SDL_Surface *parachute_surf = IMG_Load("./parachute.png");
-
-
-
 
   cliff_tex = SDL_CreateTextureFromSurface(my_renderer, cliff_surf);
   avatar_tex = SDL_CreateTextureFromSurface(my_renderer, avatar_surf);
@@ -108,7 +106,6 @@ int main()
   rect_parachute.y = 0;
   rect_parachute.w = 150;
   rect_parachute.h = 150;
-
 
   while (is_running)
   {
@@ -158,8 +155,9 @@ int main()
     //   rect_avatar.h -= .8;
     //   rect_avatar.w -= .8;
     // }
-    
-    if(rect_avatar.h <= 0){
+
+    if (rect_avatar.h <= 0)
+    {
       rect_avatar.x = 10;
       rect_avatar.y = 10;
       rect_avatar.w = 150;
@@ -170,22 +168,23 @@ int main()
     // SDL_Delay(10);
     SDL_RenderClear(my_renderer);
 
-    if(counter % 8 == 0){
+    if (counter % 8 == 0)
+    {
       SDL_RenderCopy(my_renderer, sunset_tex, NULL, &rect_sunset);
     }
-    else{
+    else
+    {
       SDL_RenderCopy(my_renderer, sunset_wave_tex, NULL, &rect_sunset);
     }
 
     SDL_RenderCopy(my_renderer, cliff_tex, NULL, &rect_cliff);
-    
-    
-    
 
-    if(parachute == true){
-    SDL_RenderCopy(my_renderer, parachute_tex, NULL, &rect_avatar);
+    if (parachute == true)
+    {
+      SDL_RenderCopy(my_renderer, parachute_tex, NULL, &rect_avatar);
     }
-    else{
+    else
+    {
       SDL_RenderCopy(my_renderer, avatar_tex, NULL, &rect_avatar);
     }
     SDL_RenderPresent(my_renderer);
@@ -193,19 +192,20 @@ int main()
     fps_counter++;
     if (this_start_time >= (last_count_start_time + 1000))
     {
-        last_count_start_time = this_start_time;
-        current_fps = fps_counter;
-        fps_counter = 0;
-      }
-
-      std::cout << "fps = " << current_fps << std::endl;
-
-      this_duration = SDL_GetTicks() - this_start_time;
-
-      if(this_duration < frame_duration){
-        SDL_Delay(frame_duration - this_duration);
-      }
+      last_count_start_time = this_start_time;
+      current_fps = fps_counter;
+      fps_counter = 0;
     }
+
+    std::cout << "fps = " << current_fps << std::endl;
+
+    this_duration = SDL_GetTicks() - this_start_time;
+
+    if (this_duration < frame_duration)
+    {
+      SDL_Delay(frame_duration - this_duration);
+    }
+  }
 
   SDL_DestroyRenderer(my_renderer);
 
@@ -213,6 +213,6 @@ int main()
 
   IMG_Quit();
   SDL_Quit();
-  
-  return 0; 
+
+  return 0;
 }
