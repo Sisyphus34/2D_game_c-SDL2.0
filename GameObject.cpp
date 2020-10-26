@@ -40,22 +40,27 @@ void GameObject::objUpdate(Uint32 ticks)
         switch (GameEngine::event.key.keysym.sym)
         {
         case SDLK_LEFT:
-            xpos -= 3;
+            xpos -= 4;
             srcRect.x = sprite * 16;
             srcRect.y = 16;
             state = "Move_Left";
             break;
         case SDLK_RIGHT:
-            xpos += 3;
+            xpos += 4;
             srcRect.x = sprite * 16;
             srcRect.y = 16;
             state = "Move_Right";
             break;
         case SDLK_UP:
-            ypos -= 5;
+            ypos -= 6;
+            srcRect.x = sprite * 16;
+            srcRect.y = 32;
             break;
         case SDLK_DOWN:
-            ypos += 5;
+            ypos += 6;
+            srcRect.x = sprite * 16;
+            srcRect.y = 32;
+            state = "Move_Down";
             break;
         default:
             break;
@@ -71,6 +76,7 @@ void GameObject::objUpdate(Uint32 ticks)
             {
                 srcRect.x = sprite * 16;
                 srcRect.y = 0;
+                state = "";
                 break;
             }
         case SDLK_RIGHT:
@@ -78,6 +84,7 @@ void GameObject::objUpdate(Uint32 ticks)
             {
                 srcRect.x = sprite * 16;
                 srcRect.y = 0;
+                state = "";
                 break;
             }
         case SDLK_UP:
@@ -85,6 +92,7 @@ void GameObject::objUpdate(Uint32 ticks)
             {
                 srcRect.x = sprite * 16;
                 srcRect.y = 0;
+                state = "";
                 break;
             }
         case SDLK_DOWN:
@@ -92,10 +100,13 @@ void GameObject::objUpdate(Uint32 ticks)
             {
                 srcRect.x = sprite * 16;
                 srcRect.y = 0;
+                state = "";
                 break;
             }
         default:
             srcRect.x = sprite * 16;
+            srcRect.y = 0;
+            state = "";
             break;
         }
         break;
