@@ -20,7 +20,6 @@ void GameObject::objUpdate(Uint32 ticks)
     // xpos++;
     // ypos++;
     Uint32 sprite = (ticks / 100) % 4;
-    // SDL_Rect srcrect = {sprite * 16, 0, 16, 16};
     srcRect.h = 16;
     srcRect.w = 16;
     srcRect.x = 0;
@@ -30,9 +29,6 @@ void GameObject::objUpdate(Uint32 ticks)
     destRect.y = ypos;
     destRect.w = srcRect.w * 4;
     destRect.h = srcRect.h * 4;
-
-    /* Alien screen coordinates */
-    // int dstrect.x = 0, dstrect.y = 0;
 
     /* Check for events */
 
@@ -44,68 +40,62 @@ void GameObject::objUpdate(Uint32 ticks)
         switch (GameEngine::event.key.keysym.sym)
         {
         case SDLK_LEFT:
-            xpos -= 4;
+            xpos -= 3;
             srcRect.x = sprite * 16;
             srcRect.y = 16;
             state = "Move_Left";
             break;
         case SDLK_RIGHT:
-            xpos += 4;
+            xpos += 3;
             srcRect.x = sprite * 16;
             srcRect.y = 16;
             state = "Move_Right";
             break;
         case SDLK_UP:
-            ypos -= 2;
+            ypos -= 5;
             break;
         case SDLK_DOWN:
-            ypos += 2;
+            ypos += 5;
             break;
         default:
             break;
         }
         break;
-    /* We must also use the SDL_KEYUP events to zero the x */
-    /* and y velocity variables. But we must also be       */
-    /* careful not to zero the velocities when we shouldn't*/
+
     case SDL_KEYUP:
         switch (GameEngine::event.key.keysym.sym)
         {
         case SDLK_LEFT:
-            /* We check to make sure the alien is moving */
-            /* to the left. If it is then we zero the    */
-            /* velocity. If the alien is moving to the   */
-            /* right then the right key is still press   */
-            /* so we don't tocuh the velocity            */
+
             if (xpos < 0)
             {
-                srcRect.x = 0;
+                srcRect.x = sprite * 16;
                 srcRect.y = 0;
                 break;
             }
         case SDLK_RIGHT:
             if (xpos > 0)
             {
-                srcRect.x = 0;
+                srcRect.x = sprite * 16;
                 srcRect.y = 0;
                 break;
             }
         case SDLK_UP:
             if (ypos < 0)
             {
-                srcRect.x = 0;
+                srcRect.x = sprite * 16;
                 srcRect.y = 0;
                 break;
             }
         case SDLK_DOWN:
             if (ypos > 0)
             {
-                srcRect.x = 0;
+                srcRect.x = sprite * 16;
                 srcRect.y = 0;
                 break;
             }
         default:
-            // srcRect.x = 0;
+            srcRect.x = sprite * 16;
             break;
         }
         break;
@@ -121,6 +111,10 @@ void GameObject::objRender()
     {
         SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_HORIZONTAL);
     }
+    else if (state == "Move_Down")
+    {
+        SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_VERTICAL);
+    }
     else
-        SDL_RenderCopy(renderer, objTexture, &srcRect, &destRect);
+        SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_NONE);
 }

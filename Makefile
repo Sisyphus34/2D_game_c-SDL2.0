@@ -16,7 +16,7 @@ SRCS = Main.cpp GameEngine.cpp TextureManager.cpp GameObject.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 # name of executable
-EXEC = sprite_test
+EXEC = assignment3m
 
 # default recipe
 all: $(EXEC)
