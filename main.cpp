@@ -1,6 +1,12 @@
+/**
+ * Shawn Picardy
+ * Assignment 3
+ * Cpsc-4160/6140
+ */
+
 #include "GameEngine.h"
 
-GameEngine *game = nullptr;
+GameEngine *game = NULL;
 
 int main(int argc, const char *argv[])
 {
@@ -24,17 +30,22 @@ int main(int argc, const char *argv[])
         frameStart = SDL_GetTicks();
 
         game->handleEvents();
+
+        // Update game passing current tick
         game->update(frameStart);
         game->render();
 
         frameTime = SDL_GetTicks() - frameStart;
 
+        // Limit frames to 60fps for consistency
         if (frameDuration > frameTime)
         {
             SDL_Delay(frameDuration - frameTime);
         }
     }
     std::cout << "Game quitting ..." << std::endl;
+
+    // Clean up after yourself dang it!
     game->clean();
 
     return 0;

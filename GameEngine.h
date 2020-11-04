@@ -6,6 +6,8 @@
 #include <SDL2/SDL.h>
 #include <SDL_image.h>
 
+// #include "GameObject.h"
+
 class GameEngine
 {
 public:
@@ -18,8 +20,12 @@ public:
   void update(Uint32 ticks);
   void render();
   void clean();
+  // bool collide(GameObject *a, GameObject *b);
 
-  bool running() { return isRunning; };
+  bool running()
+  {
+    return isRunning;
+  };
 
   // static SDL_Renderer *renderer;
   static SDL_Event event;

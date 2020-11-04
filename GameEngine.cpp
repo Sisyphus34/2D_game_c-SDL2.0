@@ -3,7 +3,7 @@
 #include "GameObject.h"
 
 GameObject *flying;
-// GameObject *hound;
+GameObject *hound;
 // GameObject *slug;
 
 SDL_Event GameEngine::event;
@@ -16,7 +16,6 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
 {
     //Enable gpu_enhanced textures
     // IMG_Init(IMG_INIT_PNG);
-
     int flags = 0;
     if (fullscreen)
     {
@@ -43,7 +42,7 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
     }
 
     flying = new GameObject("assets/enemy_flying_spritesheet.png", renderer, 0, 0);
-    // hound = new GameObject("assets/enemy-hound.png", renderer, 150, 0);
+    hound = new GameObject("assets/enemy-hound.png", renderer, 250, 250);
     // slug = new GameObject("assets/enemy-slug.png", renderer, 300, 0);
 }
 void GameEngine::handleEvents()
@@ -65,8 +64,14 @@ void GameEngine::handleEvents()
 void GameEngine::update(Uint32 ticks)
 {
     flying->objUpdate(ticks);
-    // hound->objUpdate();
+    hound->enemyUpdate(ticks);
     // slug->objUpdate();
+
+    if (flying->collide(flying, hound))
+    {
+        flying->count++;
+        std::cout << "Collision Detected..." << flying->count << std::endl;
+    }
 }
 void GameEngine::render()
 {
@@ -75,9 +80,8 @@ void GameEngine::render()
     /**
      * This is where we put stuff we want to render
      */
-
     flying->objRender();
-    // hound->objRender();
+    hound->enemyRender();
     // slug->objRender();
 
     SDL_RenderPresent(renderer);
@@ -88,3 +92,33 @@ void GameEngine::clean()
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
 }
+// bool GameEngine::collide(GameObject *a, GameObject *b)
+// {
+//     int aLeft = a->getXpos();
+//     int aRight = aLeft + 64;
+//     int aTop = a->getYpos();
+//     int aBottom = aTop + 64;
+
+//     int bLeft = b->getXpos();
+//     int bRight = bLeft + 64;
+//     int bTop = b->getYpos();
+//     int bBottom = bTop + 64;
+
+//     if (aRight < bLeft)
+//     {
+//         return false;
+//     }
+//     if (aLeft > bRight)
+//     {
+//         return false;
+//     }
+//     if (aBottom < bTop)
+//     {
+//         return false;
+//     }
+//     if (aTop > bBottom)
+//     {
+//         return false;
+//     }
+//     return true;
+// }
