@@ -21,8 +21,8 @@ int main(int argc, const char *argv[])
     game->init("Shawn's Engine",
                SDL_WINDOWPOS_CENTERED,
                SDL_WINDOWPOS_CENTERED,
-               800,
-               600,
+               game->screenWidth,
+               game->screenHeight,
                false);
 
     while (game->running())

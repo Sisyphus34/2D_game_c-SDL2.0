@@ -7,11 +7,16 @@ GameObject *hound;
 // GameObject *slug;
 
 SDL_Event GameEngine::event;
+int GameEngine::screenWidth;
+int GameEngine::screenHeight;
 
 GameEngine::GameEngine()
 {
+    screenWidth = 800;
+    screenHeight = 600;
 }
 GameEngine::~GameEngine() {}
+
 void GameEngine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
     //Enable gpu_enhanced textures
@@ -42,14 +47,12 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
     }
 
     flying = new GameObject("assets/enemy_flying_spritesheet.png", renderer, 0, 0);
-    hound = new GameObject("assets/enemy-hound.png", renderer, 250, 250);
+    hound = new GameObject("assets/enemy_hound_spritesheet.png", renderer, 250, 250);
     // slug = new GameObject("assets/enemy-slug.png", renderer, 300, 0);
 }
 void GameEngine::handleEvents()
 {
-    // SDL_Event event = GameEngine::event;
     SDL_PollEvent(&event);
-    // SDL_WaitEvent(&event);
 
     switch (event.type)
     {
@@ -92,33 +95,3 @@ void GameEngine::clean()
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
 }
-// bool GameEngine::collide(GameObject *a, GameObject *b)
-// {
-//     int aLeft = a->getXpos();
-//     int aRight = aLeft + 64;
-//     int aTop = a->getYpos();
-//     int aBottom = aTop + 64;
-
-//     int bLeft = b->getXpos();
-//     int bRight = bLeft + 64;
-//     int bTop = b->getYpos();
-//     int bBottom = bTop + 64;
-
-//     if (aRight < bLeft)
-//     {
-//         return false;
-//     }
-//     if (aLeft > bRight)
-//     {
-//         return false;
-//     }
-//     if (aBottom < bTop)
-//     {
-//         return false;
-//     }
-//     if (aTop > bBottom)
-//     {
-//         return false;
-//     }
-//     return true;
-// }
