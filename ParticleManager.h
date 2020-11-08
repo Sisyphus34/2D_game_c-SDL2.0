@@ -7,6 +7,7 @@ public:
 
     ParticleManager();
     ~ParticleManager();
+
     void draw();
     void update();
 };

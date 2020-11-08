@@ -9,6 +9,10 @@ class ParticleManager
     {
     }
 
+    // cycle through some MaxParticles
+    // RANDOMNESS is one of the most important aspects of
+    // particle systems
+
     void ParticleManager::update()
     {
     }
