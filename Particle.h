@@ -1,6 +1,14 @@
 #pragma once
 #include "GameEngine.h"
 
+const int MAX_PARTS = 10;
+
+const int PART_TYPE_BLOW = 0;
+const int MAX_PARTS_BLOW = 20;
+
+const int PART_TYPE_GLEE = 1;
+const int MAX_PARTS_GLEE = 20;
+
 class Particle
 {
 public:
@@ -9,7 +17,7 @@ public:
 
     // if the lifetime has not ended, draw whatever is
     // appropriate for that particle
-    void obj_int(const char *graphic, SDL_Renderer *ren, int start_x, int start_y, int width, int height);
+    void obj_init(const char *graphic, SDL_Renderer *ren, int start_x, int start_y, int width, int height);
     void obj_update_glee();
     void obj_update_blow();
 
@@ -47,6 +55,8 @@ private:
 
     int state;
     int lifetime;
+
+    SDL_Renderer *obj_renderer;
 };
 
 class ParticleManager

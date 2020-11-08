@@ -29,9 +29,12 @@ int main(int argc, const char *argv[])
     {
         frameStart = SDL_GetTicks();
 
+        std::cout << "Made it here main..." << std::endl;
+
         game->handleEvents();
 
         // Update game passing current tick
+
         game->update(frameStart);
         game->render();
 

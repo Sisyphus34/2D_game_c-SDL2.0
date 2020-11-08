@@ -1,4 +1,5 @@
 #include "Particle.h"
+#include "TextureManager.h"
 
 Particle::Particle()
 {
@@ -6,6 +7,19 @@ Particle::Particle()
 
 Particle::~Particle()
 {
+}
+
+void Particle::obj_init(const char *graphic, SDL_Renderer *ren, int start_x, int start_y, int start_w, int start_h)
+{
+
+    obj_graphic = TextureManager::LoadTexture(graphic, ren);
+    obj_renderer = ren;
+
+    x_pos = (float)start_x;
+    y_pos = (float)start_y;
+
+    width = start_w;
+    height = start_h;
 }
 
 void Particle::obj_update_blow()
@@ -130,10 +144,16 @@ int Particle::obj_get_lifetime()
 {
     return lifetime;
 }
+
 void Particle::obj_set_lifetime(int new_lifetime)
 {
     lifetime = new_lifetime;
 }
+
+ParticleManager::ParticleManager()
+{
+}
+ParticleManager::~ParticleManager() {}
 
 void ParticleManager::pm_init(const char *graphic, SDL_Renderer *ren, int start_x, int start_y, int start_w, int start_h, int type)
 {
@@ -147,10 +167,10 @@ void ParticleManager::pm_init(const char *graphic, SDL_Renderer *ren, int start_
         max_parts = MAX_PARTS_BLOW;
         for (int i = 0; i < max_parts; i++)
         {
-            particles[i].obj_init(graphic, ren, start_x, start_y, start_w, start_h, );
+            particles[i].obj_init(graphic, ren, start_x, start_y, start_w, start_h);
             particles[i].obj_set_x_vel(3.0 - (rand() % 60) / 10.0);
             particles[i].obj_set_y_vel(0 - (rand() % 60) / 10.0);
-            particles[i].obj_set_lifetime(20 + (rant() % 10));
+            particles[i].obj_set_lifetime(20 + (rand() % 10));
         }
     }
     if (part_type == PART_TYPE_GLEE)

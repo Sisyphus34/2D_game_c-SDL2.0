@@ -1,6 +1,6 @@
 #include "GameObject.h"
 #include "TextureManager.h"
-#include "GameEngine.h"
+// #include "GameEngine.h"
 
 // SDL_Event event = GameEngine::event;
 

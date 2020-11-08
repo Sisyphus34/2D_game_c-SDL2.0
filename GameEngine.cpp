@@ -1,9 +1,11 @@
 #include "GameEngine.h"
 #include "TextureManager.h"
 #include "GameObject.h"
+#include "Particle.h"
 
 GameObject *flying;
 GameObject *hound;
+ParticleManager *pm;
 // GameObject *slug;
 
 SDL_Event GameEngine::event;
@@ -48,11 +50,18 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
 
     flying = new GameObject("assets/enemy_flying_spritesheet.png", renderer, 0, 0);
     hound = new GameObject("assets/enemy_hound_spritesheet.png", renderer, 250, 250);
+
+    std::cout << "Made it here..." << std::endl;
+    // pm = new ParticleManager();
+    // pm->pm_init("assets/enemy-slug.png", renderer, 150, 150, 16, 16, 0);
     // slug = new GameObject("assets/enemy-slug.png", renderer, 300, 0);
+    std::cout << "Made it here 2..." << std::endl;
 }
 void GameEngine::handleEvents()
 {
+    std::cout << "Made it here 3..." << std::endl;
     SDL_PollEvent(&event);
+    std::cout << "Made it here 4..." << std::endl;
 
     switch (event.type)
     {
@@ -74,6 +83,7 @@ void GameEngine::update(Uint32 ticks)
     {
         flying->count++;
         std::cout << "Collision Detected..." << flying->count << std::endl;
+        // pm->pm_update();
     }
 }
 void GameEngine::render()
@@ -85,6 +95,8 @@ void GameEngine::render()
      */
     flying->objRender();
     hound->enemyRender();
+    // pm->pm_render(renderer);
+
     // slug->objRender();
 
     SDL_RenderPresent(renderer);
