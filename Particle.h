@@ -1,13 +1,8 @@
 #pragma once
+
 #include "GameEngine.h"
 
-const int MAX_PARTS = 10;
-
-const int PART_TYPE_BLOW = 0;
-const int MAX_PARTS_BLOW = 20;
-
-const int PART_TYPE_GLEE = 1;
-const int MAX_PARTS_GLEE = 20;
+const int MAX_PARTS = 20;
 
 class Particle
 {
@@ -15,36 +10,30 @@ public:
     Particle();
     ~Particle();
 
-    // if the lifetime has not ended, draw whatever is
-    // appropriate for that particle
-    void obj_init(const char *graphic, SDL_Renderer *ren, int start_x, int start_y, int width, int height);
-    void obj_update_glee();
-    void obj_update_blow();
+    void particle_init(const char *graphic, SDL_Renderer *ren, int start_x, int start_y, int start_width, int start_height);
+    void particle_update();
+    void particle_render(SDL_Renderer *ren);
+    void particle_quit();
 
-    void obj_render_glee(SDL_Renderer *ren);
-    void obj_render_blow(SDL_Renderer *ren);
+    int particle_get_x_vel();
+    void particle_set_x_vel(float x_val);
 
-    void obj_quit();
+    int particle_get_y_vel();
+    void particle_set_y_vel(float y_val);
 
-    int obj_get_x_vel();
-    void obj_set_x_vel(float x_val);
+    int particle_get_x_pos();
+    void particle_set_x_pos(int new_x);
 
-    int obj_get_y_vel();
-    void obj_set_y_vel(float y_val);
+    int particle_get_y_pos();
+    void particle_set_y_pos(int new_y);
 
-    int obj_get_x_pos();
-    void obj_set_x_pos(int new_x);
+    int particle_get_lifetime();
+    void particle_set_lifetime(int new_lifetime);
 
-    int obj_get_y_pos();
-    void obj_set_y_pos(int new_y);
-
-    int obj_get_lifetime();
-    void obj_set_lifetime(int new_lifetime);
+    bool particle_get_isDead();
+    void particle_set_isDead(bool died);
 
 private:
-    SDL_Texture *obj_graphic;
-    SDL_Rect obj_rect;
-
     float x_pos;
     float y_pos;
     float x_vel;
@@ -53,10 +42,12 @@ private:
     int width;
     int height;
 
-    int state;
+    bool isDead;
     int lifetime;
 
-    SDL_Renderer *obj_renderer;
+    SDL_Texture *particle_texture;
+    SDL_Rect particle_rect;
+    SDL_Renderer *particle_renderer;
 };
 
 class ParticleManager
@@ -65,7 +56,7 @@ public:
     ParticleManager();
     ~ParticleManager();
 
-    void pm_init(const char *graphic, SDL_Renderer *ren, int start_x, int start_y, int width, int height, int type);
+    void pm_init(const char *graphic, SDL_Renderer *ren, int start_x, int start_y, int width, int height);
 
     void pm_update();
     void pm_render(SDL_Renderer *ren);

@@ -5,7 +5,7 @@
 
 GameObject *flying;
 GameObject *hound;
-ParticleManager *pm;
+ParticleManager *part_mgr;
 // GameObject *slug;
 
 SDL_Event GameEngine::event;
@@ -52,8 +52,8 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
     hound = new GameObject("assets/enemy_hound_spritesheet.png", renderer, 250, 250);
 
     std::cout << "Made it here..." << std::endl;
-    // pm = new ParticleManager();
-    // pm->pm_init("assets/enemy-slug.png", renderer, 150, 150, 16, 16, 0);
+    part_mgr = new ParticleManager();
+    part_mgr->pm_init("assets/enemy-slug.png", renderer, 250, 250, 8, 8);
     // slug = new GameObject("assets/enemy-slug.png", renderer, 300, 0);
     std::cout << "Made it here 2..." << std::endl;
 }
@@ -83,7 +83,7 @@ void GameEngine::update(Uint32 ticks)
     {
         flying->count++;
         std::cout << "Collision Detected..." << flying->count << std::endl;
-        // pm->pm_update();
+        part_mgr->pm_update();
     }
 }
 void GameEngine::render()
@@ -95,7 +95,7 @@ void GameEngine::render()
      */
     flying->objRender();
     hound->enemyRender();
-    // pm->pm_render(renderer);
+    part_mgr->pm_render(renderer);
 
     // slug->objRender();
 
