@@ -16,7 +16,7 @@ SRCS = Main.cpp GameEngine.cpp TextureManager.cpp GameObject.cpp Particle.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 # name of executable
-EXEC = assignment3
+EXEC = assignment4
 
 # default recipe
 all: $(EXEC)
