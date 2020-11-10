@@ -7,6 +7,7 @@ GameObject *flying;
 GameObject *hound;
 ParticleManager *part_mgr;
 // GameObject *slug;
+bool run = false;
 
 SDL_Event GameEngine::event;
 int GameEngine::screenWidth;
@@ -48,20 +49,16 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
         std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
     }
 
-    flying = new GameObject("assets/enemy_flying_spritesheet.png", renderer, 0, 0);
+    flying = new GameObject("assets/enemy_flying_spritesheet.png", renderer, 10, 10);
     hound = new GameObject("assets/enemy_hound_spritesheet.png", renderer, 250, 250);
 
-    std::cout << "Made it here..." << std::endl;
+    // create a new particle manager and initialize it for use
     part_mgr = new ParticleManager();
-    part_mgr->pm_init("assets/enemy-slug.png", renderer, 250, 250, 8, 8);
-    // slug = new GameObject("assets/enemy-slug.png", renderer, 300, 0);
-    std::cout << "Made it here 2..." << std::endl;
+    part_mgr->pm_init("assets/enemy-slug.png", renderer, 250, 250, 4, 4);
 }
 void GameEngine::handleEvents()
 {
-    std::cout << "Made it here 3..." << std::endl;
     SDL_PollEvent(&event);
-    std::cout << "Made it here 4..." << std::endl;
 
     switch (event.type)
     {
@@ -76,14 +73,24 @@ void GameEngine::handleEvents()
 void GameEngine::update(Uint32 ticks)
 {
     flying->objUpdate(ticks);
-    hound->enemyUpdate(ticks);
-    // slug->objUpdate();
+    hound->hitUpdate(ticks);
 
+    // check if flying player collides with hound player
     if (flying->collide(flying, hound))
     {
-        flying->count++;
-        std::cout << "Collision Detected..." << flying->count << std::endl;
+        run = true;
+        hound->set_obj_state("hit");
+        hound->hitUpdate(ticks);
+    }
+
+    // run particle animation
+    if (run)
+    {
         part_mgr->pm_update();
+    }
+    else
+    {
+        run = false;
     }
 }
 void GameEngine::render()
@@ -96,8 +103,6 @@ void GameEngine::render()
     flying->objRender();
     hound->enemyRender();
     part_mgr->pm_render(renderer);
-
-    // slug->objRender();
 
     SDL_RenderPresent(renderer);
 }

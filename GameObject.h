@@ -9,13 +9,18 @@ public:
     ~GameObject();
 
     void objUpdate(Uint32);
-    void enemyUpdate(Uint32);
+    void hitUpdate(Uint32);
     void objRender();
     void enemyRender();
     int getXpos();
     int getYpos();
     bool collide(GameObject *a, GameObject *b);
-    int count = 0;
+
+    int get_obj_rectX();
+    int get_obj_rectY();
+
+    void set_obj_state(std::string new_state);
+    std::string get_obj_state();
 
 private:
     int xpos;

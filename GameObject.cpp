@@ -33,6 +33,15 @@ int GameObject::getYpos()
     return ypos;
 }
 
+int GameObject::get_obj_rectX()
+{
+    return destRect.x;
+}
+int GameObject::get_obj_rectY()
+{
+    return destRect.y;
+}
+
 void GameObject::objUpdate(Uint32 ticks)
 {
     int max_width = GameEngine::screenWidth;
@@ -47,17 +56,21 @@ void GameObject::objUpdate(Uint32 ticks)
     // // Set source rectangle to same size as sprite (16px x 16px)
     // srcRect.h = 16;
     // srcRect.w = 16;
-    srcRect.x = 0;
+    // srcRect.x = 0;
+    // srcRect.y = 0;
+
+    srcRect.x = sprite * 16;
     srcRect.y = 0;
+    state = "";
 
     destRect.x = xpos;
     destRect.y = ypos;
     destRect.w = srcRect.w * 4; // increase scale for easier viewing
     destRect.h = srcRect.h * 4; // increase scale for easier viewing
     if (xpos >= 0 &&
-        xpos <= max_width &&
+        xpos <= max_width - 64 &&
         ypos >= 0 &&
-        ypos <= max_height)
+        ypos <= max_height - 64)
     {
         /* Check for events */
         switch (GameEngine::event.type)
@@ -143,6 +156,25 @@ void GameObject::objUpdate(Uint32 ticks)
             break;
         }
     }
+    else
+    {
+        if (xpos < 0)
+        {
+            xpos += 5;
+        }
+        if (xpos > (max_width - 64))
+        {
+            xpos -= 5;
+        }
+        if (ypos < 0)
+        {
+            ypos += 5;
+        }
+        if (ypos > (max_height - 64))
+        {
+            ypos -= 5;
+        }
+    }
 }
 
 void GameObject::objRender()
@@ -158,21 +190,24 @@ void GameObject::objRender()
     else
         SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_NONE);
 }
-void GameObject::enemyUpdate(Uint32 ticks)
-{
 
-    // SDL_Event event;
-    // xpos++;
-    // ypos++;
+void GameObject::set_obj_state(std::string new_state)
+{
+    state = new_state;
+}
+std::string GameObject::get_obj_state()
+{
+    return state;
+}
+void GameObject::hitUpdate(Uint32 ticks)
+{
 
     // The spritesheet has 4 images used to create the animations
     Uint32 sprite = (ticks / 100) % 4;
 
-    // Set source rectangle to same size as sprite (16px x 16px)
-    srcRect.h = 16;
-    srcRect.w = 16;
-    srcRect.x = 0;
+    srcRect.x = sprite * 16;
     srcRect.y = 0;
+    // state = "";
 
     destRect.x = xpos;
     destRect.y = ypos;
@@ -180,87 +215,27 @@ void GameObject::enemyUpdate(Uint32 ticks)
     destRect.h = srcRect.h * 4; // increase scale for easier viewing
 
     /* Check for events */
-    switch (GameEngine::event.type)
+    if (state == "hit")
     {
-    /* Look for a keypress */
-    case SDL_KEYDOWN:
-        /* Check the SDLKey values and move change the coords */
-        switch (GameEngine::event.key.keysym.sym)
-        {
-        case SDLK_a:
-            xpos -= 4;
-            srcRect.x = sprite * 16;
-            srcRect.y = 16; // row 2 of the sprite sheet "walking animation"
-            state = "Move_Left";
-            break;
-        case SDLK_d:
-            xpos += 4;
-            srcRect.x = sprite * 16;
-            srcRect.y = 16; // row 2 of the sprite sheet "walking animation"
-            state = "Move_Right";
-            break;
-        case SDLK_w:
-            ypos -= 6;
-            // srcRect.x = sprite * 16;
-            // srcRect.y = 32; // row 3 of the sprite sheet "flying animation"
-            break;
-        case SDLK_s:
-            ypos += 6;
-            // srcRect.x = sprite * 16;
-            // srcRect.y = 32; // row 3 of the sprite sheet "flying animation"
-            state = "Move_Down";
-            break;
-        default:
-            break;
-        }
-        break;
 
-    case SDL_KEYUP:
-        switch (GameEngine::event.key.keysym.sym)
-        {
-        case SDLK_a:
-            // row 0 of the sprite sheet "idle animation" upon key release
-            if (xpos < 0)
-            {
-                srcRect.x = sprite * 16;
-                srcRect.y = 0;
-                state = "";
-                break;
-            }
-        case SDLK_d:
-            if (xpos > 0)
-            {
-                srcRect.x = sprite * 16;
-                srcRect.y = 0;
-                state = "";
-                break;
-            }
-        case SDLK_w:
-            if (ypos < 0)
-            {
-                srcRect.x = sprite * 16;
-                srcRect.y = 0;
-                state = "";
-                break;
-            }
-        case SDLK_s:
-            if (ypos > 0)
-            {
-                srcRect.x = sprite * 16;
-                srcRect.y = 0;
-                state = "";
-                break;
-            }
-        default:
-            srcRect.x = sprite * 16;
-            srcRect.y = 0;
-            state = "";
-            break;
-        }
-        break;
+        xpos += 10;
+        ypos += 5;
+        std::cout << "hit!" << std::endl;
+    }
 
-    default:
-        break;
+    if (destRect.x > GameEngine::screenWidth || destRect.y > GameEngine::screenHeight)
+    {
+        xpos = rand() % GameEngine::screenWidth - 32;
+        ypos = rand() % GameEngine::screenHeight - 32;
+        state = "";
+        srcRect.x = sprite * 16;
+        srcRect.y = 0;
+        // state = "";
+
+        destRect.x = xpos;
+        destRect.y = ypos;
+        destRect.w = srcRect.w * 4; // increase scale for easier viewing
+        destRect.h = srcRect.h * 4; // increase scale for easier viewing
     }
 }
 
@@ -270,10 +245,6 @@ void GameObject::enemyRender()
     {
         SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_HORIZONTAL);
     }
-    // else if (state == "Move_Down")
-    // {
-    //     SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_VERTICAL);
-    // }
     else
         SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_NONE);
 }

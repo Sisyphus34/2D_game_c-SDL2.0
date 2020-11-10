@@ -47,7 +47,7 @@ private:
 
     SDL_Texture *particle_texture;
     SDL_Rect particle_rect;
-    SDL_Renderer *particle_renderer;
+    // SDL_Renderer *particle_renderer;
 };
 
 class ParticleManager
@@ -64,7 +64,4 @@ public:
 
 private:
     Particle particles[MAX_PARTS];
-    int pos_x;
-    int pos_y;
-    int part_type;
 };

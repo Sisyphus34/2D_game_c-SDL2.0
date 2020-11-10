@@ -29,7 +29,7 @@ int main(int argc, const char *argv[])
     {
         frameStart = SDL_GetTicks();
 
-        std::cout << "Made it here main..." << std::endl;
+        // std::cout << "Made it here main..." << std::endl;
 
         game->handleEvents();
 
