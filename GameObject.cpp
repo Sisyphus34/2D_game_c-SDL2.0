@@ -25,7 +25,7 @@ GameObject::GameObject(const char *texturesheet, SDL_Renderer *ren, int x, int y
     destRect.h = srcRect.h * 4; // increase scale for easier viewing
 
     objPartcleMgr = particleMgr;
-    objPartcleMgr->pm_init("assets/enemy-slug.png", renderer, 450, 450, 4, 4);
+    objPartcleMgr->pm_init("assets/enemy-slug.png", renderer, 482, 450, 4, 4);
 }
 
 int GameObject::getXpos()
@@ -242,7 +242,7 @@ void GameObject::hitUpdate(Uint32 ticks)
         destRect.y = ypos;
         destRect.w = srcRect.w * 4; // increase scale for easier viewing
         destRect.h = srcRect.h * 4; // increase scale for easier viewing
-        objPartcleMgr->pm_init("assets/enemy-slug.png", renderer, xpos, ypos, 4, 4);
+        objPartcleMgr->pm_init("assets/enemy-slug.png", renderer, xpos + 32, ypos, 4, 4);
     }
 }
 

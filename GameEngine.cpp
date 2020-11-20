@@ -62,13 +62,13 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
     part_mgr = new ParticleManager();
 
     // part_mgr->pm_init("assets/enemy-slug.png", renderer, 10, 450, 4, 4);
-    std::cout << "got here" << std::endl;
+    // std::cout << "got here" << std::endl;
     flying = new GameObject("assets/enemy_flying_spritesheet.png", renderer, 10, 450, part_mgr);
     part_mgr2 = new ParticleManager();
 
     // part_mgr2->pm_init("assets/enemy-slug.png", renderer, 450, 450, 4, 4);
 
-    std::cout << "got here 2" << std::endl;
+    // std::cout << "got here 2" << std::endl;
     hound = new GameObject("assets/enemy_hound_spritesheet.png", renderer, 450, 450, part_mgr2);
 
     // create a new particle manager and initialize it for use
@@ -98,10 +98,6 @@ void GameEngine::update(Uint32 ticks)
     {
         run = true;
         hound->set_obj_state("hit");
-        hound->hitUpdate(ticks);
-    }
-    else
-    {
         hound->hitUpdate(ticks);
     }
 
