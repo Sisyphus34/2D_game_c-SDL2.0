@@ -2,10 +2,13 @@
 #include "TextureManager.h"
 #include "GameObject.h"
 #include "Particle.h"
+#include "Background.h"
 
+Background *background;
 GameObject *flying;
 GameObject *hound;
 ParticleManager *part_mgr;
+ParticleManager *part_mgr2;
 // GameObject *slug;
 bool run = false;
 
@@ -39,7 +42,7 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
                                   flags);
 
         renderer = SDL_CreateRenderer(window, -1, 0);
-        SDL_SetRenderDrawColor(renderer, 147, 106, 177, 255);
+        // SDL_SetRenderDrawColor(renderer, 147, 106, 177, 255);
 
         isRunning = true;
     }
@@ -49,12 +52,27 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
         std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
     }
 
-    flying = new GameObject("assets/enemy_flying_spritesheet.png", renderer, 10, 10);
-    hound = new GameObject("assets/enemy_hound_spritesheet.png", renderer, 250, 250);
+    background = new Background(
+        "assets/road.png",
+        "assets/pillars.png",
+        "assets/hills.png",
+        "assets/sky_moon.png",
+        renderer);
+
+    part_mgr = new ParticleManager();
+
+    // part_mgr->pm_init("assets/enemy-slug.png", renderer, 10, 450, 4, 4);
+    std::cout << "got here" << std::endl;
+    flying = new GameObject("assets/enemy_flying_spritesheet.png", renderer, 10, 450, part_mgr);
+    part_mgr2 = new ParticleManager();
+
+    // part_mgr2->pm_init("assets/enemy-slug.png", renderer, 450, 450, 4, 4);
+
+    std::cout << "got here 2" << std::endl;
+    hound = new GameObject("assets/enemy_hound_spritesheet.png", renderer, 450, 450, part_mgr2);
 
     // create a new particle manager and initialize it for use
-    part_mgr = new ParticleManager();
-    part_mgr->pm_init("assets/enemy-slug.png", renderer, 250, 250, 4, 4);
+    // part_mgr = new ParticleManager();
 }
 void GameEngine::handleEvents()
 {
@@ -82,16 +100,20 @@ void GameEngine::update(Uint32 ticks)
         hound->set_obj_state("hit");
         hound->hitUpdate(ticks);
     }
-
-    // run particle animation
-    if (run)
-    {
-        part_mgr->pm_update();
-    }
     else
     {
-        run = false;
+        hound->hitUpdate(ticks);
     }
+
+    // run particle animation
+    // if (run)
+    // {
+    //     part_mgr->pm_update();
+    // }
+    // else
+    // {
+    //     run = false;
+    // }
 }
 void GameEngine::render()
 {
@@ -100,9 +122,11 @@ void GameEngine::render()
     /**
      * This is where we put stuff we want to render
      */
+
+    background->backgroundRender();
     flying->objRender();
     hound->enemyRender();
-    part_mgr->pm_render(renderer);
+    // part_mgr->pm_render(renderer);
 
     SDL_RenderPresent(renderer);
 }

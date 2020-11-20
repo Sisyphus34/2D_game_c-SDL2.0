@@ -3,8 +3,9 @@
 // #include "GameEngine.h"
 
 // SDL_Event event = GameEngine::event;
+// ParticleManager *particleMgr;
 
-GameObject::GameObject(const char *texturesheet, SDL_Renderer *ren, int x, int y)
+GameObject::GameObject(const char *texturesheet, SDL_Renderer *ren, int x, int y, ParticleManager *particleMgr)
 {
     renderer = ren;
     objTexture = TextureManager::LoadTexture(texturesheet, ren);
@@ -22,6 +23,9 @@ GameObject::GameObject(const char *texturesheet, SDL_Renderer *ren, int x, int y
     destRect.y = ypos;
     destRect.w = srcRect.w * 4; // increase scale for easier viewing
     destRect.h = srcRect.h * 4; // increase scale for easier viewing
+
+    objPartcleMgr = particleMgr;
+    objPartcleMgr->pm_init("assets/enemy-slug.png", renderer, 450, 450, 4, 4);
 }
 
 int GameObject::getXpos()
@@ -220,13 +224,15 @@ void GameObject::hitUpdate(Uint32 ticks)
 
         xpos += 10;
         ypos += 5;
-        std::cout << "hit!" << std::endl;
+        objPartcleMgr->pm_update();
+
+        // std::cout << "hit!" << std::endl;
     }
 
     if (destRect.x > GameEngine::screenWidth || destRect.y > GameEngine::screenHeight)
     {
         xpos = rand() % GameEngine::screenWidth - 32;
-        ypos = rand() % GameEngine::screenHeight - 32;
+        ypos = rand() % 40 + 450;
         state = "";
         srcRect.x = sprite * 16;
         srcRect.y = 0;
@@ -236,17 +242,22 @@ void GameObject::hitUpdate(Uint32 ticks)
         destRect.y = ypos;
         destRect.w = srcRect.w * 4; // increase scale for easier viewing
         destRect.h = srcRect.h * 4; // increase scale for easier viewing
+        objPartcleMgr->pm_init("assets/enemy-slug.png", renderer, xpos, ypos, 4, 4);
     }
 }
 
 void GameObject::enemyRender()
 {
+
     if (state == "Move_Left")
     {
         SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_HORIZONTAL);
     }
     else
+    {
         SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_NONE);
+        objPartcleMgr->pm_render(renderer);
+    }
 }
 bool GameObject::collide(GameObject *a, GameObject *b)
 {
