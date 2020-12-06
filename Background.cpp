@@ -16,27 +16,22 @@ Background::Background(const char *layer1, const char *layer2, const char *layer
     layer1_rect.x = 0;
     layer1_rect.y = 0;
     layer1_rect.w = 800;
-    layer1_rect.h = 600;
+    layer1_rect.h = 640;
 
     layer2_rect.x = 0;
     layer2_rect.y = 0;
     layer2_rect.w = 800;
-    layer2_rect.h = 600;
+    layer2_rect.h = 640;
 
     layer3_rect.x = 0;
     layer3_rect.y = 0;
     layer3_rect.w = 800;
-    layer3_rect.h = 600;
+    layer3_rect.h = 640;
 
     layer4_rect.x = 0;
     layer4_rect.y = 0;
     layer4_rect.w = 800;
-    layer4_rect.h = 600;
-
-    // layer5_rect.x = 0;
-    // layer5_rect.y = 0;
-    // layer5_rect.w = 800;
-    // layer5_rect.h = 600;
+    layer4_rect.h = 640;
 }
 Background::~Background()
 {

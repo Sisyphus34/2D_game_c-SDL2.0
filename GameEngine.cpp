@@ -3,14 +3,18 @@
 #include "GameObject.h"
 #include "Particle.h"
 #include "Background.h"
+#include "Menu.h"
 
+Menu *main_menu;
 Background *background;
 GameObject *flying;
 GameObject *hound;
 ParticleManager *part_mgr;
 ParticleManager *part_mgr2;
+
 // GameObject *slug;
 bool run = false;
+bool in_menu = true;
 
 SDL_Event GameEngine::event;
 int GameEngine::screenWidth;
@@ -19,7 +23,7 @@ int GameEngine::screenHeight;
 GameEngine::GameEngine()
 {
     screenWidth = 800;
-    screenHeight = 600;
+    screenHeight = 640;
 }
 GameEngine::~GameEngine() {}
 
@@ -59,6 +63,8 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
         "assets/sky_moon.png",
         renderer);
 
+    main_menu = new Menu("assets/sky_moon.png", renderer);
+
     part_mgr = new ParticleManager();
 
     // part_mgr->pm_init("assets/enemy-slug.png", renderer, 10, 450, 4, 4);
@@ -90,15 +96,23 @@ void GameEngine::handleEvents()
 
 void GameEngine::update(Uint32 ticks)
 {
-    flying->objUpdate(ticks);
-    hound->hitUpdate(ticks);
-
-    // check if flying player collides with hound player
-    if (flying->collide(flying, hound))
+    if (main_menu->getMenuCoord() < 160)
     {
-        run = true;
-        hound->set_obj_state("hit");
+        main_menu->menuUpdate(ticks);
+    }
+    else
+    {
+        flying->objUpdate(ticks);
         hound->hitUpdate(ticks);
+        // main_menu->menuUpdate(ticks);
+
+        // check if flying player collides with hound player
+        if (flying->collide(flying, hound))
+        {
+            run = true;
+            hound->set_obj_state("hit");
+            hound->hitUpdate(ticks);
+        }
     }
 
     // run particle animation
@@ -113,18 +127,25 @@ void GameEngine::update(Uint32 ticks)
 }
 void GameEngine::render()
 {
-    SDL_RenderClear(renderer);
 
     /**
      * This is where we put stuff we want to render
      */
+    SDL_RenderClear(renderer);
+    if (main_menu->getMenuCoord() < 160)
+    {
 
-    background->backgroundRender();
-    flying->objRender();
-    hound->enemyRender();
-    // part_mgr->pm_render(renderer);
+        main_menu->menuRender();
+    }
+    else
+    {
+        background->backgroundRender();
+        flying->objRender();
+        hound->enemyRender();
+    }
 
     SDL_RenderPresent(renderer);
+    // part_mgr->pm_render(renderer);
 }
 void GameEngine::clean()
 {

@@ -85,13 +85,13 @@ void GameObject::objUpdate(Uint32 ticks)
             switch (GameEngine::event.key.keysym.sym)
             {
             case SDLK_LEFT:
-                xpos -= 4;
+                xpos -= 6;
                 srcRect.x = sprite * 16;
                 srcRect.y = 16; // row 2 of the sprite sheet "walking animation"
                 state = "Move_Left";
                 break;
             case SDLK_RIGHT:
-                xpos += 4;
+                xpos += 6;
                 srcRect.x = sprite * 16;
                 srcRect.y = 16; // row 2 of the sprite sheet "walking animation"
                 state = "Move_Right";
@@ -222,15 +222,15 @@ void GameObject::hitUpdate(Uint32 ticks)
     if (state == "hit")
     {
 
-        xpos += 10;
-        ypos += 5;
+        xpos += 7;
+        ypos += 3;
         objPartcleMgr->pm_update();
-
         // std::cout << "hit!" << std::endl;
     }
 
     if (destRect.x > GameEngine::screenWidth || destRect.y > GameEngine::screenHeight)
     {
+        // SDL_Delay(300);
         xpos = rand() % GameEngine::screenWidth - 32;
         ypos = rand() % 40 + 450;
         state = "";

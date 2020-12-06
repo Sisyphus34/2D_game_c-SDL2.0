@@ -16,7 +16,7 @@ private:
     SDL_Texture *Layer2_texture;
     SDL_Texture *Layer3_texture;
     SDL_Texture *Layer4_texture;
-    SDL_Texture *Layer5_texture;
-    SDL_Rect layer1_rect, layer2_rect, layer3_rect, layer4_rect, layer5_rect;
+    // SDL_Texture *Layer5_texture;
+    SDL_Rect layer1_rect, layer2_rect, layer3_rect, layer4_rect;
     SDL_Renderer *renderer;
 };
