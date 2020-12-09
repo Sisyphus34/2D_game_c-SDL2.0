@@ -25,6 +25,11 @@ public:
     return isRunning;
   };
 
+  void setIsRunning(bool flip)
+  {
+    isRunning = flip;
+  }
+
   // static SDL_Renderer *renderer;
   static SDL_Event event;
   static int screenWidth;

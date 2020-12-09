@@ -10,7 +10,7 @@ public:
     ~GameObject();
 
     void objUpdate(Uint32);
-    void hitUpdate(Uint32);
+    void enemyUpdate(Uint32);
     void objRender();
     void enemyRender();
     int getXpos();
@@ -26,6 +26,9 @@ public:
 private:
     int xpos;
     int ypos;
+    int containRight;
+    int containLeft;
+    bool aiFlag;
     std::string state;
 
     SDL_Texture *objTexture;

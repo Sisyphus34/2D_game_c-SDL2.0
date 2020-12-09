@@ -6,6 +6,7 @@
 #include "Menu.h"
 
 Menu *main_menu;
+Menu *pause_screen;
 Background *background;
 GameObject *flying;
 GameObject *hound;
@@ -15,6 +16,7 @@ ParticleManager *part_mgr2;
 // GameObject *slug;
 bool run = false;
 bool in_menu = true;
+bool pause = false;
 
 SDL_Event GameEngine::event;
 int GameEngine::screenWidth;
@@ -63,19 +65,20 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
         "assets/sky_moon.png",
         renderer);
 
-    main_menu = new Menu("assets/sky_moon.png", renderer);
+    main_menu = new Menu("assets/main_menu.png", renderer);
+    pause_screen = new Menu("assets/pause_screen.png", renderer);
 
     part_mgr = new ParticleManager();
 
     // part_mgr->pm_init("assets/enemy-slug.png", renderer, 10, 450, 4, 4);
     // std::cout << "got here" << std::endl;
-    flying = new GameObject("assets/enemy_flying_spritesheet.png", renderer, 10, 450, part_mgr);
+    flying = new GameObject("assets/enemy_flying_spritesheet.png", renderer, 10, 500, part_mgr);
     part_mgr2 = new ParticleManager();
 
     // part_mgr2->pm_init("assets/enemy-slug.png", renderer, 450, 450, 4, 4);
 
     // std::cout << "got here 2" << std::endl;
-    hound = new GameObject("assets/enemy_hound_spritesheet.png", renderer, 450, 450, part_mgr2);
+    hound = new GameObject("assets/enemy_hound_spritesheet.png", renderer, 450, 500, part_mgr2);
 
     // create a new particle manager and initialize it for use
     // part_mgr = new ParticleManager();
@@ -96,50 +99,76 @@ void GameEngine::handleEvents()
 
 void GameEngine::update(Uint32 ticks)
 {
-    if (main_menu->getMenuCoord() < 160)
+
+    switch (GameEngine::event.type)
+    {
+    /* Look for a keypress */
+    case SDL_KEYDOWN:
+        /* Check the SDLKey values and move change the coords */
+        switch (GameEngine::event.key.keysym.sym)
+        {
+        case SDLK_SPACE:
+            pause = !pause;
+        default:
+            break;
+        }
+        break;
+    }
+    if (!main_menu->getStartGame())
     {
         main_menu->menuUpdate(ticks);
+        pause_screen->menuUpdate(ticks);
+        if (main_menu->getQuitGame())
+        {
+            isRunning = false;
+        }
     }
     else
     {
-        flying->objUpdate(ticks);
-        hound->hitUpdate(ticks);
-        // main_menu->menuUpdate(ticks);
-
-        // check if flying player collides with hound player
-        if (flying->collide(flying, hound))
+        if (!pause)
         {
-            run = true;
-            hound->set_obj_state("hit");
-            hound->hitUpdate(ticks);
+            flying->objUpdate(ticks);
+            hound->enemyUpdate(ticks);
+
+            // check if flying player collides with hound player
+            if (flying->collide(flying, hound))
+            {
+                run = true;
+                hound->set_obj_state("hit");
+                hound->enemyUpdate(ticks);
+            }
         }
     }
-
-    // run particle animation
-    // if (run)
-    // {
-    //     part_mgr->pm_update();
-    // }
-    // else
-    // {
-    //     run = false;
-    // }
 }
 void GameEngine::render()
 {
-
     /**
      * This is where we put stuff we want to render
      */
     SDL_RenderClear(renderer);
-    if (main_menu->getMenuCoord() < 160)
+    if (!main_menu->getStartGame())
     {
 
+        background->backgroundRender();
         main_menu->menuRender();
+    }
+    else if (pause)
+    {
+        /**
+         * If game is paused, 
+         * set showArrow to false to prevent the main menu arrow selector from renderering,
+         * show the game object and also the "PAUSE" screen
+         */
+        pause_screen->setShowArrow(false);
+        background->backgroundRender();
+        flying->objRender();
+        hound->enemyRender();
+        pause_screen->menuRender();
     }
     else
     {
         background->backgroundRender();
+
         flying->objRender();
         hound->enemyRender();
     }

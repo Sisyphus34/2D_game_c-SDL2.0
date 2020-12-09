@@ -12,6 +12,7 @@ GameObject::GameObject(const char *texturesheet, SDL_Renderer *ren, int x, int y
 
     xpos = x;
     ypos = y;
+    aiFlag = true;
 
     // Set source rectangle to same size as sprite (16px x 16px)
     srcRect.h = 16;
@@ -62,7 +63,6 @@ void GameObject::objUpdate(Uint32 ticks)
     // srcRect.w = 16;
     // srcRect.x = 0;
     // srcRect.y = 0;
-
     srcRect.x = sprite * 16;
     srcRect.y = 0;
     state = "";
@@ -203,7 +203,7 @@ std::string GameObject::get_obj_state()
 {
     return state;
 }
-void GameObject::hitUpdate(Uint32 ticks)
+void GameObject::enemyUpdate(Uint32 ticks)
 {
 
     // The spritesheet has 4 images used to create the animations
@@ -215,41 +215,59 @@ void GameObject::hitUpdate(Uint32 ticks)
 
     destRect.x = xpos;
     destRect.y = ypos;
-    destRect.w = srcRect.w * 4; // increase scale for easier viewing
-    destRect.h = srcRect.h * 4; // increase scale for easier viewing
 
-    /* Check for events */
+    /*************************************************************************/
+    // Basic A.I implementation //
+    if (state == "docile-right")
+    {
+        xpos += 3;
+        if ((xpos + 64) > GameEngine::screenWidth)
+        {
+            state = "docile-left";
+        }
+    }
+    if (state == "docile-left")
+    {
+        xpos -= 3;
+        if (xpos < 1)
+        {
+            state = "docile-right";
+        }
+    }
     if (state == "hit")
     {
-
         xpos += 7;
-        ypos += 3;
+        ypos += 5;
         objPartcleMgr->pm_update();
         // std::cout << "hit!" << std::endl;
     }
 
     if (destRect.x > GameEngine::screenWidth || destRect.y > GameEngine::screenHeight)
     {
-        // SDL_Delay(300);
-        xpos = rand() % GameEngine::screenWidth - 32;
-        ypos = rand() % 40 + 450;
-        state = "";
-        srcRect.x = sprite * 16;
-        srcRect.y = 0;
-        // state = "";
-
+        // relocate enemy to random coordinate on screen
+        xpos = rand() % GameEngine::screenWidth - 64;
+        ypos = rand() % GameEngine::screenHeight - 64;
         destRect.x = xpos;
         destRect.y = ypos;
         destRect.w = srcRect.w * 4; // increase scale for easier viewing
         destRect.h = srcRect.h * 4; // increase scale for easier viewing
+
+        // reset state randomly TODO: IMPLEMENT RANDOM NUMBER 0 - 1 FOR STATE
+        state = "docile-right";
+
+        // reset animation and particle manager
+        srcRect.x = sprite * 16;
+        srcRect.y = 0;
+
         objPartcleMgr->pm_init("assets/enemy-slug.png", renderer, xpos + 32, ypos, 4, 4);
     }
 }
+/*************************************************************************/
 
 void GameObject::enemyRender()
 {
 
-    if (state == "Move_Left")
+    if (state == "docile-left")
     {
         SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_HORIZONTAL);
     }
