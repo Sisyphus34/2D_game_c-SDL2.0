@@ -13,6 +13,7 @@ public:
     void enemyUpdate(Uint32);
     void objRender();
     void enemyRender();
+    void objQuit();
     int getXpos();
     int getYpos();
     bool collide(GameObject *a, GameObject *b);
@@ -29,6 +30,8 @@ private:
     int containRight;
     int containLeft;
     bool aiFlag;
+    int drawRnd;
+
     std::string state;
 
     SDL_Texture *objTexture;

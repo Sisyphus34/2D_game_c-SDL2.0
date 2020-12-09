@@ -33,7 +33,7 @@ void Particle::particle_update()
         particle_rect.w = (int)width / 2 + width * (int)(10 * lifetime / 100);
         particle_rect.h = (int)height / 2 + height * (int)(10 * lifetime / 100);
     }
-    lifetime -= 1;
+    lifetime -= 2;
 }
 void Particle::particle_render(SDL_Renderer *ren)
 {
@@ -116,7 +116,7 @@ void ParticleManager::pm_init(const char *graphic, SDL_Renderer *ren, int start_
         particles[i].particle_init(graphic, ren, start_x, start_y, start_w, start_h);
         particles[i].particle_set_x_vel(2.0 - (rand() % 50) / 10.0);
         particles[i].particle_set_y_vel(0 - (rand() % 50) / 10.0);
-        particles[i].particle_set_lifetime(30 + (rand() % 10));
+        particles[i].particle_set_lifetime(25 + (rand() % 10));
     }
 }
 void ParticleManager::pm_update()
@@ -148,7 +148,7 @@ void ParticleManager::pm_quit()
         if (particles[i].particle_get_lifetime() < 0)
         {
             particles[i].particle_quit();
-            std::cout << "Destroyed texture for particle " << i << std::endl;
+            // std::cout << "Destroyed texture for particle " << i << std::endl;
         }
     }
 }

@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "TextureManager.h"
+#include <ctime>
 // #include "GameEngine.h"
 
 // SDL_Event event = GameEngine::event;
@@ -85,19 +86,19 @@ void GameObject::objUpdate(Uint32 ticks)
             switch (GameEngine::event.key.keysym.sym)
             {
             case SDLK_LEFT:
-                xpos -= 6;
+                xpos -= 5;
                 srcRect.x = sprite * 16;
                 srcRect.y = 16; // row 2 of the sprite sheet "walking animation"
                 state = "Move_Left";
                 break;
             case SDLK_RIGHT:
-                xpos += 6;
+                xpos += 5;
                 srcRect.x = sprite * 16;
                 srcRect.y = 16; // row 2 of the sprite sheet "walking animation"
                 state = "Move_Right";
                 break;
             case SDLK_UP:
-                ypos -= 6;
+                ypos -= 5;
                 srcRect.x = sprite * 16;
                 srcRect.y = 32; // row 3 of the sprite sheet "flying animation"
                 break;
@@ -218,42 +219,47 @@ void GameObject::enemyUpdate(Uint32 ticks)
 
     /*************************************************************************/
     // Basic A.I implementation //
-    if (state == "docile-right")
+    if (state == "aggrode-right")
     {
-        xpos += 3;
+        xpos += 6;
+        srcRect.x = sprite * 16;
+        srcRect.y = 16; // row 2 of the sprite sheet "walking animation"
         if ((xpos + 64) > GameEngine::screenWidth)
         {
-            state = "docile-left";
+            state = "aggrode-left";
         }
     }
-    if (state == "docile-left")
+    if (state == "aggrode-left")
     {
-        xpos -= 3;
+        xpos -= 6;
+        srcRect.x = sprite * 16;
+        srcRect.y = 16; // row 2 of the sprite sheet "walking animation"
         if (xpos < 1)
         {
-            state = "docile-right";
+            state = "aggrode-right";
         }
     }
     if (state == "hit")
     {
-        xpos += 7;
-        ypos += 5;
         objPartcleMgr->pm_update();
-        // std::cout << "hit!" << std::endl;
+        xpos += 6;
+        ypos += 6;
     }
 
     if (destRect.x > GameEngine::screenWidth || destRect.y > GameEngine::screenHeight)
     {
+        objPartcleMgr->pm_quit();
+
         // relocate enemy to random coordinate on screen
-        xpos = rand() % GameEngine::screenWidth - 64;
-        ypos = rand() % GameEngine::screenHeight - 64;
+        xpos = rand() % GameEngine::screenWidth - 32;
+        ypos = rand() % 32 + 500;
         destRect.x = xpos;
         destRect.y = ypos;
         destRect.w = srcRect.w * 4; // increase scale for easier viewing
         destRect.h = srcRect.h * 4; // increase scale for easier viewing
 
         // reset state randomly TODO: IMPLEMENT RANDOM NUMBER 0 - 1 FOR STATE
-        state = "docile-right";
+        state = "aggrode-right";
 
         // reset animation and particle manager
         srcRect.x = sprite * 16;
@@ -261,21 +267,26 @@ void GameObject::enemyUpdate(Uint32 ticks)
 
         objPartcleMgr->pm_init("assets/enemy-slug.png", renderer, xpos + 32, ypos, 4, 4);
     }
+    // End of A.I. implementation
+    /*************************************************************************/
 }
-/*************************************************************************/
 
 void GameObject::enemyRender()
 {
 
-    if (state == "docile-left")
+    if (state == "aggrode-left")
     {
         SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_HORIZONTAL);
     }
     else
     {
         SDL_RenderCopyEx(renderer, objTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_NONE);
-        objPartcleMgr->pm_render(renderer);
     }
+    objPartcleMgr->pm_render(renderer);
+}
+void GameObject::objQuit()
+{
+    SDL_DestroyTexture(objTexture);
 }
 bool GameObject::collide(GameObject *a, GameObject *b)
 {
