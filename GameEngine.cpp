@@ -40,7 +40,7 @@ void GameEngine::init(const char *title, int xpos, int ypos, int width, int heig
     }
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
     {
-        window = SDL_CreateWindow("Assignment 3",
+        window = SDL_CreateWindow("Mind Your-Ceph",
                                   xpos,
                                   ypos,
                                   width,
